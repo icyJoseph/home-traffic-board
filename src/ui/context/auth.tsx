@@ -1,4 +1,5 @@
 import React, { createContext, useEffect, useContext, useReducer } from "react";
+import axios from "axios";
 import { getToken } from "../../data/token";
 import { ONE_HOUR } from "../../data/constants";
 
@@ -70,12 +71,21 @@ export function AuthProvider({ children }: IAuthProvider) {
   // check token
   useEffect(() => {
     if (!token) {
-      getToken(process.env.REACT_APP_VT_TOKEN)
+      const source = axios.CancelToken.source();
+
+      getToken(process.env.REACT_APP_VT_TOKEN, source)
         .then(({ token, expiry }) =>
           dispatch({ type: AuthActions.SUCCESS, token, expiry })
         )
-        .catch(() => dispatch({ type: AuthActions.FAILURE }));
+        .catch(e => {
+          if (axios.isCancel(e)) {
+            console.log("Request canceled", e.message);
+          }
+          dispatch({ type: AuthActions.FAILURE });
+        });
+      return () => source.cancel("Cancelling Token");
     }
+    return () => console.log("Clean Up Check Token");
   }, [token]);
 
   // at intervals check token validity

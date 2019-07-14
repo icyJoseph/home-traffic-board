@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { CancelTokenSource } from "axios";
 import qs from "qs";
 import { tokenEndPoint, VT_KEY, EMPTYJSON } from "../data/constants";
 
@@ -13,7 +13,11 @@ interface TokenResponse {
 // if valid, return token + expiry
 // otherwise fetch a new token
 // and save it to local storage
-export const getToken = (key: string | undefined): Promise<TokenResponse> => {
+// TODO: Make logic more semantic
+export const getToken = (
+  key: string | undefined,
+  source: CancelTokenSource
+): Promise<TokenResponse> => {
   const store = localStorage.getItem(VT_KEY) || EMPTYJSON;
   const { expiry, token } = JSON.parse(store);
   const now = new Date().getTime();
@@ -31,7 +35,8 @@ export const getToken = (key: string | undefined): Promise<TokenResponse> => {
             Authorization: `Basic ${key}`,
             "Access-Control-Allow-Origin": "*",
             "Content-Type": "application/x-www-form-urlencoded;"
-          }
+          },
+          cancelToken: source.token
         }
       )
       .then(({ data: { access_token: token, expires_in } }) => {
