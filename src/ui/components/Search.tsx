@@ -1,18 +1,19 @@
 import React from "react";
 import axios from "axios";
-import { searchStops } from "../../data/stop";
+import { searchStops } from "../../data/traffic";
 
-const useDebounce = value => {
+const useDebounce = (value: any) => {
   const [debounced, setDebounced] = React.useState(value);
 
   React.useEffect(() => {
     const timer = setTimeout(() => setDebounced(value), 300);
     return () => clearTimeout(timer);
   }, [value]);
+
   return debounced;
 };
 
-const useStopSearch = (query, token) => {
+const useStopSearch = (query: string, token: string) => {
   const [data, setData] = React.useState({});
 
   React.useEffect(() => {
@@ -37,7 +38,11 @@ const useStopSearch = (query, token) => {
   return data;
 };
 
-export function Search({ token }) {
+interface ISearch {
+  token: string;
+}
+
+export function Search({ token }: ISearch) {
   const [query, setQuery] = React.useState("");
 
   const debounced = useDebounce(query);
@@ -50,3 +55,5 @@ export function Search({ token }) {
     <input type="text" value={query} onChange={e => setQuery(e.target.value)} />
   );
 }
+
+export default Search;
