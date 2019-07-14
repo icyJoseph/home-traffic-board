@@ -1,8 +1,10 @@
 import React, { createContext, useEffect, useContext, useReducer } from "react";
 import { getToken } from "../../data/token";
+import { ONE_HOUR } from "../../data/constants";
 
 interface IAuthContext {
   token: Token;
+  error: boolean;
 }
 
 interface IAuthProvider {
@@ -38,8 +40,6 @@ const authInitialState: AuthState = {
   expiry: 0
 };
 
-const ONE_HOUR = 1000 * 60 * 60;
-
 type AuthActionsTypes = FetchToken | SuccessToken | FailureToken;
 
 const authReducer = (state: AuthState, action: AuthActionsTypes): AuthState => {
@@ -61,18 +61,20 @@ const authReducer = (state: AuthState, action: AuthActionsTypes): AuthState => {
   }
 };
 
-const AuthContext = createContext<IAuthContext>({ token: "" });
+const AuthContext = createContext<IAuthContext>({ token: "", error: false });
 
 export function AuthProvider({ children }: IAuthProvider) {
   const [state, dispatch] = useReducer(authReducer, authInitialState);
-  const { loading, error, token, expiry } = state;
+  const { error, token, expiry } = state;
 
   // check token
   useEffect(() => {
     if (!token) {
-      getToken(process.env.REACT_APP_VT_TOKEN).then(({ token, expiry }) =>
-        dispatch({ type: AuthActions.SUCCESS, token, expiry })
-      );
+      getToken(process.env.REACT_APP_VT_TOKEN)
+        .then(({ token, expiry }) =>
+          dispatch({ type: AuthActions.SUCCESS, token, expiry })
+        )
+        .catch(() => dispatch({ type: AuthActions.FAILURE }));
     }
   }, [token]);
 
@@ -83,7 +85,9 @@ export function AuthProvider({ children }: IAuthProvider) {
   }, [expiry]);
 
   return (
-    <AuthContext.Provider value={{ token }}>{children}</AuthContext.Provider>
+    <AuthContext.Provider value={{ token, error }}>
+      {children}
+    </AuthContext.Provider>
   );
 }
 

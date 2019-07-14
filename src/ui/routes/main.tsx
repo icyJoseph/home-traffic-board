@@ -2,7 +2,7 @@ import React from "react";
 import { useAuth } from "../context/auth";
 
 const App: React.FC = () => {
-  const { token } = useAuth();
+  const { token, error } = useAuth();
   return (
     <div className="App">
       <header className="App-header">
@@ -16,6 +16,7 @@ const App: React.FC = () => {
           Learn React
         </a>
         <p>token: {token}</p>
+        <p>error: {error ? "Error" : ""}</p>
       </header>
     </div>
   );
