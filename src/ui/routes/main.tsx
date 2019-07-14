@@ -1,6 +1,8 @@
 import React from "react";
 import { useAuth } from "../context/auth";
 
+import { Search } from "../components/Search";
+
 const App: React.FC = () => {
   const { token, error } = useAuth();
   return (
@@ -17,6 +19,7 @@ const App: React.FC = () => {
         </a>
         <p>token: {token}</p>
         <p>error: {error ? "Error" : ""}</p>
+        <Search token={token} />
       </header>
     </div>
   );
