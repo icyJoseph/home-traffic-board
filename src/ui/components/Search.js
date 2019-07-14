@@ -16,17 +16,22 @@ const useStopSearch = (query, token) => {
   const [data, setData] = React.useState({});
 
   React.useEffect(() => {
-    const source = axios.CancelToken.source();
+    if (query) {
+      const source = axios.CancelToken.source();
 
-    searchStops(token, query, source)
-      .then(res => setData(res))
-      .catch(e => {
-        if (axios.isCancel(e)) {
-          console.log("Cancelled stop search", e.message);
-        }
-      });
+      searchStops(token, query, source)
+        .then(res => setData(res))
+        .catch(e => {
+          if (axios.isCancel(e)) {
+            console.log("Cancelled stop search", e.message);
+          }
+        });
 
-    return () => source.cancel("Cancelling stop search request");
+      return () => source.cancel("Cancelling stop search request");
+    }
+    return () => {
+      console.log("Clean Up use stop search");
+    };
   }, [query, token]);
 
   return data;
@@ -41,5 +46,7 @@ export function Search({ token }) {
 
   console.log(result);
 
-  return <input type="text" value={query} onChange={setQuery} />;
+  return (
+    <input type="text" value={query} onChange={e => setQuery(e.target.value)} />
+  );
 }
