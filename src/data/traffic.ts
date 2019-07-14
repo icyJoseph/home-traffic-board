@@ -1,4 +1,5 @@
 import axios, { CancelTokenSource } from "axios";
+import { DateAndTime } from "./utils";
 
 export const trafficPublicEndPoint =
   "https://api.vasttrafik.se/bin/rest.exe/v2";
@@ -37,4 +38,25 @@ export const searchStops = (
         StopLocation
       };
     });
+};
+
+export const getDepartureBoard = (
+  token: string,
+  id: string,
+  source: CancelTokenSource
+) => {
+  const { date, time } = DateAndTime();
+
+  return axios
+    .get(`${trafficPublicEndPoint}/departureBoard`, {
+      headers: headers(token),
+      params: { ...defaults, format, id, date, time }
+    })
+    .then(
+      ({
+        data: {
+          DepartureBoard: { noNamespaceSchemaLocation: omit, ...rest }
+        }
+      }) => ({ ...rest })
+    );
 };
