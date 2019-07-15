@@ -1,26 +1,21 @@
 import React from "react";
 import { useAuth } from "../context/auth";
 
-import { Search } from "../components/Search";
+import Search from "../components/Search";
+import Board from "../components/Board";
 
 const App: React.FC = () => {
-  const { token, error } = useAuth();
+  const { token, loading, error } = useAuth();
+
   return (
     <div className="App">
       <header className="App-header">
         <p>Hello World!</p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-        <p>token: {token}</p>
+        {loading ? <p>Loading Token</p> : null}
         <p>error: {error ? "Error" : ""}</p>
-        <Search token={token} />
       </header>
+      {!error ? <Search token={token} /> : null}
+      {!error ? <Board token={token} /> : null}
     </div>
   );
 };
