@@ -5,7 +5,7 @@ import Search from "../components/Search";
 import Board from "../components/Board";
 
 const App: React.FC = () => {
-  const { token, loading, error } = useAuth();
+  const { loading, error } = useAuth();
 
   return (
     <div className="App">
@@ -14,8 +14,8 @@ const App: React.FC = () => {
         {loading ? <p>Loading Token</p> : null}
         <p>error: {error ? "Error" : ""}</p>
       </header>
-      {!error ? <Search token={token} /> : null}
-      {!error ? <Board token={token} /> : null}
+      {!error ? <Search /> : null}
+      {!error ? <Board /> : null}
     </div>
   );
 };

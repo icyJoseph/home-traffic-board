@@ -1,12 +1,9 @@
 import React from "react";
 import axios from "axios";
+import { useAuth } from "../context/auth";
 import { getDepartureBoard } from "../../data/traffic";
 import { textColor, HEX2RGB } from "../../data/utils";
 import { STIGBERGSTORGET } from "../../data/constants";
-
-interface IBoard {
-  token: string;
-}
 
 interface ITram {
   journeyid: string;
@@ -20,7 +17,8 @@ interface ITram {
   type: string;
 }
 
-export function Board({ token }: IBoard) {
+export function Board() {
+  const { token } = useAuth();
   const [board, setBoard] = React.useState({ Departure: [] });
 
   React.useEffect(() => {

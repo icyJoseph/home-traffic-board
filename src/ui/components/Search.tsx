@@ -1,5 +1,6 @@
 import React from "react";
 import axios from "axios";
+import { useAuth } from "../context/auth";
 import { searchStops } from "../../data/traffic";
 
 const useDebounce = (value: any) => {
@@ -38,11 +39,8 @@ const useStopSearch = (query: string, token: string) => {
   return data;
 };
 
-interface ISearch {
-  token: string;
-}
-
-export function Search({ token }: ISearch) {
+export function Search() {
+  const { token } = useAuth();
   const [query, setQuery] = React.useState("");
 
   const debounced = useDebounce(query);
