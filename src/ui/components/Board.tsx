@@ -2,7 +2,7 @@ import React from "react";
 import axios from "axios";
 import { useAuth } from "../context/auth";
 import { getDepartureBoard } from "../../data/traffic";
-import { textColor, HEX2RGB } from "../../data/utils";
+import { textColor, HEX2RGB } from "../../utils/colors";
 import { STIGBERGSTORGET } from "../../data/constants";
 
 interface ITram {
