@@ -2,7 +2,8 @@
 export const tokenEndPoint = "https://api.vasttrafik.se/token";
 export const VT_KEY = "vt";
 export const EMPTYJSON = "{}";
-export const ONE_MINUTE = 1000 * 60;
+export const ONE_SECOND = 1000;
+export const ONE_MINUTE = ONE_SECOND * 60;
 export const FJALLGATAN = {
   id: "9021014002370000",
   idx: "1",
