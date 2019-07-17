@@ -1,6 +1,7 @@
 import React from "react";
 import { useAuth } from "../context/auth";
 
+import Time from "../components/Time";
 import Search from "../components/Search";
 import Board from "../components/Board";
 
@@ -10,10 +11,12 @@ const App: React.FC = () => {
   return (
     <div className="App">
       <header className="App-header">
-        <p>Hello World!</p>
         {loading ? <p>Loading Token</p> : null}
-        <p>error: {error ? "Error" : ""}</p>
+        {error && <p>Error Getting Token</p>}
       </header>
+      <section>
+        <Time />
+      </section>
       {!error ? <Search /> : null}
       {!error ? <Board /> : null}
     </div>
