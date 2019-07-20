@@ -1,0 +1,18 @@
+.board {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: scroll;
+  margin: 0 0 0 1%;
+  width: var(--board-width);
+  padding: 0.25em;
+}
+
+.board::-webkit-scrollbar {
+  display: none;
+}
+
+.name {
+  font-size: 4em;
+  font-weight: 300;
+  margin: 0.25em 0;
+}

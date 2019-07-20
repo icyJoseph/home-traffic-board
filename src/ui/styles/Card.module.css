@@ -1,0 +1,53 @@
+.card {
+  margin: 0;
+  margin-right: 2%;
+  background: var(--foreground, #f9f9f9);
+  color: var(--text-info, #020202);
+  min-width: calc((var(--board-width, 99%) - (4) * 2%) / 4);
+  height: auto;
+  transition: min-width 1s 0.25s ease, margin 1s 0.25s ease;
+  box-shadow: 0 1px 3px 3px rgba(0, 0, 0, 0.1), 0 0 3px 3px rgba(0, 0, 0, 0.05);
+  border-radius: 5px;
+  overflow: hidden;
+}
+
+.remove {
+  composes: card;
+  overflow: hidden;
+  min-width: 0;
+  width: 0;
+  margin: 0;
+  box-shadow: unset;
+}
+
+.sign,
+.time {
+  text-align: center;
+}
+
+.urgent {
+  composes: time;
+  color: var(--text-danger, #ff0000);
+}
+
+.time > div:first-child {
+  font-size: 5em;
+}
+
+.sign > div:first-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 2em;
+}
+
+.sign > * + * {
+  font-size: 5em;
+}
+
+.time > * + * {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 2em;
+}
