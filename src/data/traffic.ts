@@ -56,11 +56,30 @@ export const searchStops = (
     });
 };
 
+interface DepartureBoard {
+  journeyid: string;
+  name: string;
+  rtTime: string;
+  rtDate: string;
+  time: string;
+  sname: string;
+  fgColor: string;
+  direction: string;
+  track: string;
+  type: string;
+}
+
+export interface DepartureBoardResponse {
+  Departure: DepartureBoard[];
+  serverdate: string;
+  servertime: string;
+}
+
 export const getDepartureBoard = (
   token: string,
   id: string,
   source: CancelTokenSource
-) => {
+): Promise<DepartureBoardResponse> => {
   const { date, time } = DateAndTime();
 
   return axios
