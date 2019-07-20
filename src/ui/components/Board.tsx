@@ -1,25 +1,18 @@
 import React from "react";
 import axios from "axios";
+import Card, { ICard } from "./Card";
 import { useAuth } from "../context/auth";
-import { getDepartureBoard } from "../../data/traffic";
-import { textColor, HEX2RGB } from "../../utils/colors";
+import { getDepartureBoard, DepartureBoardResponse } from "../../data/traffic";
 import { STIGBERGSTORGET } from "../../data/constants";
-
-interface ITram {
-  journeyid: string;
-  name: string;
-  rtTime: string;
-  time: string;
-  sname: string;
-  fgColor: string;
-  direction: string;
-  track: string;
-  type: string;
-}
+import styles from "../styles/Board.module.css";
 
 export function Board() {
   const { token } = useAuth();
-  const [board, setBoard] = React.useState({ Departure: [] });
+  const [board, setBoard] = React.useState<DepartureBoardResponse>({
+    Departure: [],
+    serverdate: "",
+    servertime: ""
+  });
 
   React.useEffect(() => {
     if (token) {
@@ -32,42 +25,25 @@ export function Board() {
   }, [token]);
 
   const { Departure: departures = [] } = board;
+
+  const now = new Date().getTime();
+
+  const withTimeLeft = departures
+    .map(({ rtTime, rtDate, ...rest }) => ({
+      ...rest,
+      rtTime,
+      rtDate,
+      timeLeft: new Date(`${rtDate}T${rtTime}`).getTime() - now
+    }))
+    .sort((a, b) => a.timeLeft - b.timeLeft);
+
   return (
     <div>
-      <h3>{STIGBERGSTORGET.name}</h3>
-      <div>
-        {departures.map(
-          ({
-            journeyid,
-            name,
-            rtTime,
-            time,
-            sname,
-            fgColor,
-            direction,
-            track,
-            type
-          }: ITram) => (
-            <div key={journeyid}>
-              <div
-                style={{
-                  background: `${fgColor}`,
-                  color: textColor(HEX2RGB(fgColor)),
-                  border: "1px solid white",
-                  margin: "1em"
-                }}
-              >
-                {sname}
-              </div>
-              <div>{type}</div>
-              <div>{rtTime}</div>
-              <div>{time}</div>
-              <div>{track}</div>
-              <div>{sname}</div>
-              <div>{direction}</div>
-            </div>
-          )
-        )}
+      <h3 className={styles.name}>{STIGBERGSTORGET.name}</h3>
+      <div className={styles.board}>
+        {withTimeLeft.map(({ journeyid, ...props }: ICard) => (
+          <Card key={journeyid} journeyid={journeyid} {...props} />
+        ))}
       </div>
     </div>
   );
