@@ -9,6 +9,14 @@ html {
   box-sizing: inherit;
 }
 
+:root {
+  --background-color: #f8f8f8;
+  --text-primary: #171717;
+  --text-info: #449944;
+  --text-danger: #ff0000;
+  --board-width: 99%;
+}
+
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
     "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
@@ -19,4 +27,6 @@ body {
   margin: 0;
   font-size: 1.5rem;
   line-height: 2;
+  background: var(--background-color, #171717);
+  color: var(--text-primary, #ccc7bc);
 }
